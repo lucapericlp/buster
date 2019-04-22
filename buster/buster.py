@@ -4,7 +4,7 @@ Usage:
   buster.py setup [--gh-repo=<repo-url>] [--dir=<path>]
   buster.py generate [--domain=<local-address>] [--dir=<path>]
   buster.py preview [--dir=<path>]
-  buster.py deploy [--dir=<path>]
+  buster.py deploy [--dir=<path>] [--signed=<BOOL>]
   buster.py add-domain <domain-name> [--dir=<path>]
   buster.py (-h | --help)
   buster.py --version
@@ -15,6 +15,7 @@ Options:
   --dir=<path>              Absolute path of directory to store static pages.
   --domain=<local-address>  Address of local ghost installation [default: localhost:2368].
   --gh-repo=<repo-url>      URL of your gh-pages repository.
+  --signed=<BOOL>           Sign the commit
 """
 
 import os
@@ -36,6 +37,11 @@ def main():
         static_path = arguments['--dir']
     else:
         static_path = os.path.join(os.getcwd(), 'static')
+
+    if arguments['--signed'] is not None:
+        signed = arguments['--signed']
+    else:
+        signed = False
 
     if arguments['generate']:
         command = ("wget "
@@ -145,8 +151,12 @@ def main():
         repo.index.commit('Blog update at {}'.format(current_time))
 
         origin = repo.remotes.origin
-        repo.git.execute(['git', 'push', '-u', origin.name,
-                         repo.active_branch.name])
+        git_cmd = ['git', 'push', '-u', origin.name,
+                         repo.active_branch.name]
+        if signed:
+            git_cmd.append('-S')
+
+        repo.git.execute(git_cmd)
         print "Good job! Deployed to Github Pages."
 
     elif arguments['add-domain']:
