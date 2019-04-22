@@ -148,13 +148,16 @@ def main():
         repo.git.add('.')
 
         current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        repo.index.commit('Blog update at {}'.format(current_time))
+        msg = "Blog update {}".format(current_time)
+        if signed:
+            repo.git.execute(['git','commit','-S','-m',msg])
+            print "Signing commit..."
+        else:
+            repo.git.execute(['git','commit','-m',msg])
 
         origin = repo.remotes.origin
-        git_cmd = ['git', 'push', '-u', origin.name,
+        git_cmd = ['git', 'push', '-u',origin.name,
                          repo.active_branch.name]
-        if signed:
-            git_cmd.append('-S')
 
         repo.git.execute(git_cmd)
         print "Good job! Deployed to Github Pages."

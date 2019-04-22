@@ -27,7 +27,7 @@ The interface
 
 ``deploy``
 
-      Commits and deploys changes static files to Github repository.
+      Commits and deploys changes static files to Github repository. Use --signed=True to sign the commits.
 
 ``add-domain <domain-name>``
 
