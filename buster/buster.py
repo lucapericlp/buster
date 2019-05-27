@@ -2,7 +2,7 @@
 
 Usage:
   buster.py setup [--gh-repo=<repo-url>] [--dir=<path>]
-  buster.py generate [--domain=<local-address>] [--dir=<path>]
+  buster.py generate [--domain=<local-address>] [--dir=<path>] [--target-domain=<domain-url>]
   buster.py preview [--dir=<path>]
   buster.py deploy [--dir=<path>] [--signed=<BOOL>]
   buster.py add-domain <domain-name> [--dir=<path>]
@@ -16,6 +16,7 @@ Options:
   --domain=<local-address>  Address of local ghost installation [default: localhost:2368].
   --gh-repo=<repo-url>      URL of your gh-pages repository.
   --signed=<BOOL>           Sign the commit
+  --target-domain=<domain-url>
 """
 
 import os
@@ -29,6 +30,8 @@ from docopt import docopt
 from time import gmtime, strftime
 from git import Repo
 from pyquery import PyQuery
+
+import subprocess
 
 
 def main():
@@ -96,6 +99,17 @@ def main():
                 newtext = fixLinks(filetext, parser)
                 with open(filepath, 'w') as f:
                     f.write(newtext)
+
+        if arguments['--target-domain'] is not None:
+            rss_file = static_path+"/rss/index.rss"
+            index_file = static_path+"/index.html"
+            target_domain = arguments['--target-domain']
+            # target_domain = "https://blog.lucaperic.com/"
+            try:
+                subprocess.check_output(["sed", "-i", "-e", "s_http://localhost:2368/_"+target_domain+"_g",rss_file],stderr=subprocess.STDOUT)
+                subprocess.check_output(["sed", "-i", "-e", "s_http://localhost:2368/rss/_"+target_domain+"rss/index.rss_g",index_file],stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as e:
+                raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
     elif arguments['preview']:
         os.chdir(static_path)
