@@ -17,15 +17,15 @@ The interface
 
       Creates a GIT repository inside ``static/`` directory.
 
-``generate [--domain=<local-address>]``
+``generate [--domain=<local-address>] [--target-domain=<domain-url>]``
 
-      Generates static pages from locally running Ghost instance.
+      Generates static pages from locally running Ghost instance. Use target domain for RSS feeds.
 
 ``preview``
 
       Preview what's generated on ``localhost:9000``.
 
-``deploy``
+``deploy [--signed=<BOOL>]``
 
       Commits and deploys changes static files to Github repository. Use --signed=True to sign the commits.
 
