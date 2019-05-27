@@ -1,3 +1,8 @@
+|HitCount|
+
+.. |HitCount| image:: http://hits.dwyl.io/lucaperic.lp/lucaperic.lp/.svg
+   :target: http://hits.dwyl.io/lucaperic.lp/lucaperic.lp/
+
 Buster
 ======
 
