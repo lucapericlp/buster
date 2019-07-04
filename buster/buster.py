@@ -87,6 +87,10 @@ def main():
             text = text.replace('jpegg','jpeg')
             text = text.replace('jpegeg','jpeg')
             text = text.replace('jpegpeg','jpeg')
+
+            text = text.replace('http://localhost:2368/','https://blog.lucaperic.com/')
+            text = text.replace('https://feedly.com/i/subscription/feed/https://blog.lucaperic.com/rss/','https://feedly.com/i/subscription/feed/https://blog.lucaperic.com/rss/index.rss')
+            text = text.replace('/author/luca/rss/','/rss/index.rss')
             d = PyQuery(bytes(bytearray(text, encoding='utf-8')), parser=parser)
             for element in d('a'):
                 e = PyQuery(element)
