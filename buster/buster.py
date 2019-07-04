@@ -70,6 +70,23 @@ def main():
         # remove superfluous "index.html" from relative hyperlinks found in text
         abs_url_regex = re.compile(r'^(?:[a-z]+:)?//', flags=re.IGNORECASE)
         def fixLinks(text, parser):
+            #extremely lazy implementation - beware.
+            text = text.replace('pngg','png')
+            text = text.replace('pngng','png')
+            text = text.replace('pngpng','png')
+
+            text = text.replace('PNGG','PNG')
+            text = text.replace('PNGNG','PNG')
+            text = text.replace('PNGPNG','PNG')
+
+
+            text = text.replace('jpgg','jpg')
+            text = text.replace('jpgpg','jpg')
+            text = text.replace('jpgjpg','jpg')
+
+            text = text.replace('jpegg','jpeg')
+            text = text.replace('jpegeg','jpeg')
+            text = text.replace('jpegpeg','jpeg')
             d = PyQuery(bytes(bytearray(text, encoding='utf-8')), parser=parser)
             for element in d('a'):
                 e = PyQuery(element)
